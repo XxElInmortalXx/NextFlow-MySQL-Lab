@@ -15,7 +15,6 @@ function FormNewPost() {
     setFormData({
         ...formData,
         [name]: value
-
     })
   }
 

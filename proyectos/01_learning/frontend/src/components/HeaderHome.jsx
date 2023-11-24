@@ -22,7 +22,7 @@ function HeaderHome() {
           <li>
             <Link
               className='text-white hover:underline'
-              href='/api/auth/singin'
+              href='/auth/login'
             >
               login
             </Link>
