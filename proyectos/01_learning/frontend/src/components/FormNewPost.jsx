@@ -2,8 +2,17 @@
 
 import { useState } from 'react'
 import { inputClass, submitClass } from '../utils/dinamicClass'
+import postAPI from '../api/post.api'
+import Alert from './Alert'
+import { useRouter } from 'next/navigation'
 
 function FormNewPost() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [alert, setAlert] = useState({
+    msg: '',
+    type: ''
+  })
   const [formData, setFormData] = useState({
     title: '',
     content: ''
@@ -18,9 +27,30 @@ function FormNewPost() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(formData)
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('AUTH_TOKEN')
+      const result = await postAPI.sendPost(formData, token)
+      const id = result.data.result.id
+      setAlert({
+        msg: '',
+        type: ''
+      })
+      setFormData({
+        title: '',
+        content: ''
+      })
+      router.push(`/blogs/${id}`)
+    } catch (error) {
+      console.log(error)
+      setAlert({
+        msg: error.response.data.msg,
+        type: 'error'
+      })
+    }
+    setLoading(false)
   }
   return (
     <form
@@ -48,6 +78,8 @@ function FormNewPost() {
       >
         Submit
       </button>
+      {loading && <p className="bg-gray-100 border-l-4 border-gray-500 text-gray-700 px-4 py-3 mt-4">Loading...</p>}
+      {alert.msg !== '' && <Alert msg={alert.msg} type={alert.type} />}
     </form>
   )
 }

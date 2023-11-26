@@ -1,30 +1,23 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize'
-import { sequelize } from '../config/db.config.js'
+import { sequelize } from '../config/db.config'
 
-export class Post extends Model {}
+export class Comment extends Model {}
 
-Post.init({
+Comment.init({
   id: {
     type: DataTypes.STRING,
     defaultValue: UUIDV4,
     primaryKey: true
   },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  content: {
+  text: {
     type: DataTypes.STRING,
     allowNull: false
   },
   userId: {
     type: DataTypes.STRING,
     allowNull: false
-  },
-  commentId: {
-    type: DataTypes.STRING
   }
 }, {
   sequelize,
-  modelName: 'Post'
+  nameModel: 'Comment'
 })

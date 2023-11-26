@@ -29,6 +29,13 @@ User.init({
     type: DataTypes.STRING,
     allowNull: true,
     defaultValue: UUIDV4
+  },
+  postId: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  commentId: {
+    type: DataTypes.STRING
   }
 }, {
   sequelize,
