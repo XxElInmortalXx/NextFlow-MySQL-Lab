@@ -24,4 +24,39 @@ const newPost = async (req, res) => {
   }
 }
 
-export { newPost }
+const getPosts = async (req, res) => {
+  try {
+    const result = await Post.findAll({ include: { all: true } })
+    return res.status(200).json({
+      msg: 'posts retrieved',
+      result
+    })
+  } catch (error) {
+    return res.status(500).json({
+      msg: error.message
+    })
+  }
+}
+
+const getPost = async (req, res) => {
+  const { id } = req.params
+  try {
+    const result = await Post.findAll({ where: { id }, include: { all: true } })
+    // validar que haya resultados
+    if (Object.keys(result).length === 0) {
+      return res.status(404).json({
+        msg: 'post not found'
+      })
+    }
+    return res.status(200).json({
+      msg: 'posts retrieved',
+      result
+    })
+  } catch (error) {
+    return res.status(500).json({
+      msg: error.message
+    })
+  }
+}
+
+export { newPost, getPosts, getPost }

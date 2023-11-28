@@ -9,5 +9,11 @@ export default {
     },
     verifyAccount (token) {
         return api.get(`/auth/verify/${token}`)
+    },
+    forgot (formData) {
+        return api.post('/auth/forgot', formData)
+    },
+    recover (formData, token) {
+        return api.post('/auth/recover/' + token, formData)
     }
 }

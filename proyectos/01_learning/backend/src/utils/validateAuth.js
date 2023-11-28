@@ -60,7 +60,35 @@ const validateLogin = (user) => {
   return null
 }
 
+const validateForgot = (email) => {
+  // validar que el email no esté vacío
+  if (email === '') {
+    return 'The email is empty'
+  }
+  // validar que el email tenga formato email
+  if (!isEmail.test(email)) {
+    return 'The email is invalid'
+  }
+
+  return null
+}
+
+const validateRecover = (password) => {
+  // validar que el password no esté vacío
+  if (password === '') {
+    return 'The password is empty'
+  }
+  // validar que el password tenga mas de 3 caracteres
+  if (password.length <= 3) {
+    return 'the password is too short'
+  }
+
+  return null
+}
+
 export {
   validateRegister,
-  validateLogin
+  validateLogin,
+  validateForgot,
+  validateRecover
 }

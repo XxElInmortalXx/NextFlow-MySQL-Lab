@@ -1,20 +1,26 @@
 import jwt from 'jsonwebtoken'
 
+const generateId = () => {
+  const dateId = Date.now().toString()
+  const mathId = Math.random().toString(36).substring(2)
+  return `${dateId}${mathId}`
+}
+
 const generateJWT = (id) => {
-  const token = jwt.sign({ id }, 'secretJWT', {
+  const token = jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: 1000 * 60 * 60 * 24 * 60
   })
   return token
 }
 
 const decodeJWT = (token) => {
-  const decoded = jwt.decode(token, 'secretJWT')
+  const decoded = jwt.decode(token, process.env.JWT_SECRET)
   return decoded
 }
 
 const verifyJWT = (token) => {
-  const decoded = jwt.verify(token, 'secretJWT')
+  const decoded = jwt.verify(token, process.env.JWT_SECRET)
   return decoded
 }
 
-export { generateJWT, decodeJWT, verifyJWT }
+export { generateJWT, decodeJWT, verifyJWT, generateId }

@@ -44,7 +44,6 @@ function FormNewPost() {
       })
       router.push(`/blogs/${id}`)
     } catch (error) {
-      console.log(error)
       setAlert({
         msg: error.response.data.msg,
         type: 'error'

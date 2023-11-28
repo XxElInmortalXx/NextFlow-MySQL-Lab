@@ -2,26 +2,25 @@
 
 import authApi from "@/api/auth.api"
 import Alert from "@/components/Alert"
-import { inputClass, submitClass, submitClassTwo } from "@/utils/dinamicClass"
-import Link from "next/link"
+import { inputClass, submitClass } from "@/utils/dinamicClass"
 import { useState } from "react"
+import { useRouter } from 'next/navigation'
 
-function forgotPage() {
+function recoverPage({ params }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [alert, setAlert] = useState({
     msg: '',
     type: ''
   })
   const [formData, setFormData] = useState({
-    email: ''
-
+    password: ''
   })
-
   const handleChange = (e) => {
     e.preventDefault()
     const { name, value } = e.target
     setFormData({
-      ...formData,
+     ...formData,
       [name]: value
     })
   }
@@ -30,18 +29,19 @@ function forgotPage() {
     e.preventDefault()
     setLoading(true)
     try {
-      const result = await authApi.forgot(formData)
+      const token = params.token
+      const result = await authApi.recover(formData, token)
       if (result.data.msg) {
         setAlert({
           msg: result.data.msg,
-          type: 'success'
+          type:'success'
         })
         setFormData({
-          email: ''
+          password: ''
         })
+        router.push('/auth')
       }
     } catch (error) {
-      console.log(error)
       setAlert({
         msg: error.response.data.msg,
         type: 'error'
@@ -51,39 +51,25 @@ function forgotPage() {
     }
   }
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit}>
         <fieldset className="space-y-4">
-          <legend className="text-center font-bold text-xl">Write your email</legend>
+          <legend className="text-center font-bold text-xl">Write your new password</legend>
           <input
             className={inputClass}
-            type="email"
-            placeholder="alpiryk@gmail.com"
+            type="password"
+            placeholder="********"
             onChange={handleChange}
-            name="email"
-            value={formData.email}
+            name="password"
+            value={formData.password}
           />
         </fieldset>
-        <button type="submit" disabled={loading} className={`${submitClass} mt-4`}>Send Email</button>
+        <button type="submit" disabled={loading} className={`${submitClass} mt-4`}>Write your new password</button>
         {loading && <p className="bg-gray-100 border-l-4 border-gray-500 text-gray-700 px-4 py-3 mt-4">Loading...</p>}
         {alert.msg !== '' && <Alert msg={alert.msg} type={alert.type} />}
       </form>
-      <footer className="flex gap-5 mt-4">
-        <Link
-          href='/auth'
-          className={`${submitClassTwo} text-center`}
-        >
-          Login
-        </Link>
-        <Link
-          href='/auth/register'
-          className={`${submitClassTwo} text-center`}
-        >
-          Register
-        </Link>
-      </footer>
-    </>
+    </div>
   )
 }
 
-export default forgotPage
+export default recoverPage

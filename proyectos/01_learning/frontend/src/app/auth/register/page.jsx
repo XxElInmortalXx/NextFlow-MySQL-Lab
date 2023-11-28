@@ -60,7 +60,7 @@ function registerPage() {
         <input
           className={inputClass}
           type="text"
-          placeholder="Andres Eduardo"
+          placeholder="First Name"
           onChange={handleChange}
           name="firstName"
           value={formData.firstName}
@@ -68,7 +68,7 @@ function registerPage() {
         <input
           className={inputClass}
           type="text"
-          placeholder="Rosas Alpiri"
+          placeholder="Last Name"
           onChange={handleChange}
           name="lastName"
           value={formData.lastName}
@@ -76,7 +76,7 @@ function registerPage() {
         <input
           className={inputClass}
           type="email"
-          placeholder="alpiryk@gmail.com"
+          placeholder="Your Email"
           onChange={handleChange}
           name="email"
           value={formData.email}

@@ -16,7 +16,6 @@ function tokenPage({ params }) {
     e.preventDefault()
     setLoading(true)
     try {
-      console.log('try')
       const result = await authApi.verifyAccount(params.token)
       const smg = await result.data.msg
       setAlert({
@@ -24,7 +23,6 @@ function tokenPage({ params }) {
         type: 'success'
       })
     } catch (error) {
-      console.log('catch')
       const msg = await error.response.data.msg
       setAlert({
         msg: msg,

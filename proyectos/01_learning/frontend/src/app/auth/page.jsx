@@ -1,13 +1,15 @@
 'use client'
 
 import { inputClass, submitClass, submitClassTwo } from '@/utils/dinamicClass'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import authApi from '../../api/auth.api'
 import Alert from '@/components/Alert'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import AuthContext from '@/context/auth.context'
 
 function loginPage() {
+  const { setIsLoggedIn } = useContext(AuthContext)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [alert, setAlert] = useState({
@@ -34,13 +36,14 @@ function loginPage() {
     try {
       const result = await authApi.login(formData)
       if (result.data.msg === 'Is login') {
+        setLoading(true)
+        setIsLoggedIn(true)
         const token = result.data.token
         localStorage.setItem('AUTH_TOKEN', token)
         setAlert({
           msg: '',
           type: ''
         })
-        setLoading(true)
         // redireccionar a otra página
         return router.push('/')
       }

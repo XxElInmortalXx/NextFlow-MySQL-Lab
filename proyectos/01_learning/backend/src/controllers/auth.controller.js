@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
 import { User } from '../models/user.model.js'
-import { validateRegister, validateLogin } from '../utils/validateAuth.js'
-import { sendEmailVerification } from '../email/auth.email.js'
-import { generateJWT } from '../utils/index.js'
+import { validateRegister, validateLogin, validateForgot, validateRecover } from '../utils/validateAuth.js'
+import { sendEmailForgot, sendEmailVerification } from '../email/auth.email.js'
+import { generateId, generateJWT } from '../utils/index.js'
 
 const userRegister = async (req, res) => {
   const { firstName, lastName, email, password } = req.body
@@ -32,8 +32,6 @@ const userRegister = async (req, res) => {
       email,
       password: hashedPassword
     })
-
-    console.log(user)
 
     const { token } = user.dataValues
     await sendEmailVerification({ token, email })
@@ -113,8 +111,72 @@ const userLogin = async (req, res) => {
   }
 }
 
-const userForgot = () => {
-  console.log('desde forgot')
+const userForgot = async (req, res) => {
+  const { email } = req.body
+  try {
+    // validar email
+    const validated = validateForgot(email)
+    if (validated) {
+      return res.status(401).json({
+        msg: validated
+      })
+    }
+    // validar que el usuario existe
+    const result = await User.findAll({ where: { email } })
+    if (result.length === 0) {
+      return res.status(401).json({
+        msg: 'The user does not exist'
+      })
+    }
+    // generar token
+    const newToken = generateId()
+    // actualizar token
+    await User.update({ token: newToken }, { where: { email } })
+    // enviar email
+    await sendEmailForgot({ token: newToken, email })
+    // mensaje de éxito
+    res.status(200).json({
+      msg: 'Email sent successfully'
+    })
+  } catch (error) {
+    res.status(500).json({
+      msg: error.message
+    })
+  }
 }
 
-export { userRegister, useVerifiy, userLogin, userForgot }
+const userRecover = async (req, res) => {
+  try {
+    // validar password
+    const { password } = req.body
+    const validated = validateRecover(password)
+    if (validated) {
+      return res.status(401).json({
+        msg: validated
+      })
+    }
+    // validar si token es válido existe
+    const { token } = req.params
+    const user = await User.findAll({ where: { token } })
+    if (Object.keys(user).length === 0) {
+      return res.status(401).json({
+        msg: 'The token is not valid'
+      })
+    }
+    // actualizar contraseña
+    const hashedPassword = await bcrypt.hash(password, 10)
+    await User.update({ password: hashedPassword }, { where: { token } })
+    // actualizar token
+    await User.update({ token: null }, { where: { token } })
+    // mensaje de éxito
+    res.status(200).json({
+      msg: 'Password reset successfully'
+    })
+  } catch (error) {
+    res.status(500).json({
+      msg: error.message
+    })
+  }
+}
+
+export { userRegister, useVerifiy, userLogin, userForgot, userRecover }

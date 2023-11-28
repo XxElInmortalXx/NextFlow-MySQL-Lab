@@ -1,20 +1,51 @@
 'use client'
 
 import { inputClass, submitClass } from "@/utils/dinamicClass"
+import commentAPI from '../api/comment.api'
 import { useState } from "react"
+import Alert from "./Alert"
 
-function FormComment() {
-  const [comment, setComment] = useState('')
+function FormComment({ postId, getComments }) {
+  const [loading, setLoading] = useState(false)
+  const [alert, setAlert] = useState({
+    msg: '',
+    type: ''
+  })
+  const [formData, setformData] = useState({
+    comment: ''
+  })
   
   const handleCommentChange = (e) => {
     e.preventDefault()
-    const value = e.target.value
-    setComment(value)
+    const { value } = e.target
+    setformData({
+      comment: value
+    })
   }
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault()
-    console.log(comment)
+    setLoading(true)
+    try {
+      const token = localStorage.getItem('AUTH_TOKEN')
+      const result = await commentAPI.addComment(formData, postId, token)
+      if (result.data.msg) {
+        setAlert({
+          msg: result.data.msg,
+          type: 'success'
+        })
+        setformData({
+          comment: ''
+        }) 
+      }
+      await getComments()
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        type: 'error'
+      })  
+    }
+    setLoading(false)
   }
   return (
     <form
@@ -27,11 +58,13 @@ function FormComment() {
           type="text"
           name="comment"
           className={inputClass}
-          value={comment}
+          value={formData.comment}
           onChange={handleCommentChange}
         />
       </fieldset>
       <button type="submit" className={submitClass}>Submit Comment</button>
+      {loading && <p>Loading...</p>}
+      {alert.msg !== '' && <Alert msg={alert.msg} type={alert.type} />}
     </form>
   )
 }

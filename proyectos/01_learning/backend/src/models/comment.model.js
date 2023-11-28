@@ -1,5 +1,5 @@
 import { DataTypes, Model, UUIDV4 } from 'sequelize'
-import { sequelize } from '../config/db.config'
+import { sequelize } from '../config/db.config.js'
 
 export class Comment extends Model {}
 
