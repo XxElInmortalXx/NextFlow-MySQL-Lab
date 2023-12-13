@@ -2,9 +2,9 @@
 ![Logo](./../../logo.jpeg)
 
 
-# Blog Interactivo: Creación, Comentarios y Seguridad
+# To Do List
 
-Project completed: A dynamic blog built from scratch with Next.js, Tailwind CSS, Node.js and Express. It includes a robust system of user registration, content publishing, commenting and viewing without registration. Explore the code in my GitHub repository and learn more about this multifunctional project!
+The "To Do List" project is a comprehensive web application designed to improve personal productivity and organization. With a focus on usability and security, this platform offers users the ability to manage their daily tasks efficiently.
 
 ## Tech Stack
 
@@ -15,9 +15,8 @@ Project completed: A dynamic blog built from scratch with Next.js, Tailwind CSS,
 
 ## Screenshots
 
-![App Screenshot](./source/blog1.png)
-![App Screenshot](./source/blog2.png)
-![App Screenshot](./source/blog3.png)
+![App Screenshot](./source/image1.png)
+![App Screenshot](./source/image2.png)
 
 
 ## Run Locally
@@ -25,13 +24,13 @@ Project completed: A dynamic blog built from scratch with Next.js, Tailwind CSS,
 Clone the project
 
 ```bash
-  git clone https://github.com/XxElInmortalXx/NextFlow-MySQL-Lab/tree/main/proyectos/01_learning
+  git clone https://github.com/XxElInmortalXx/NextFlow-MySQL-Lab/tree/main/proyectos/02_to_do_list
 ```
 
 Go to the project directory
 
 ```bash
-  cd 01_learning
+  cd 02_to_do_list
 ```
 
 ## Run Frontend
@@ -75,34 +74,24 @@ Start the server
 
 - Secure user registration
 - Password security
-- Content publishing
-- Comments on posts
+- Write down your tasks
 
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
 
+#### Backend
+
 `DB_NAME`
 `DB_USER`
 `DB_PASS`
 `DB_HOST`
 
-`EMAIL_HOST`
-`EMAIL_PORT`
-`EMAIL_USER`
-`EMAIL_PASS`
-
 `JWT_SECRET`
 
 `CLIENT_URL`
 
-
 ## Authors
 
 - [@Andres Eduardo Rosas Alpiri](https://github.com/XxElInmortalXx)
-
-
-## Acknowledgements
-
- - [Candra Kriswinarto](https://www.linkedin.com/in/candra-kriswinarto/)

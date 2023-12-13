@@ -13,7 +13,7 @@ const app = express()
 app.use(express.json())
 
 // cors
-const whiteList = ['http://localhost:3000', undefined]
+const whiteList = ['http://localhost:3000']
 const corsOptions = {
   origin: (origin, callBack) => {
     if (whiteList.includes(origin)) {
